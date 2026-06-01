@@ -313,6 +313,23 @@
   .result-item .ri-meta { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
   .result-item .ri-actions { flex-shrink: 0; display: flex; gap: 6px; }
 
+  /* ── GMAIL ── */
+  .btn-gmail { background: #EA4335; color: white; border: none; box-shadow: var(--shadow-card); }
+  .btn-gmail:hover { background: #C5221F; box-shadow: var(--shadow-lift); }
+  .gmail-panel {
+    background: #FEF8F8;
+    border: 1.5px solid #FADBD8;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-top: 1rem;
+    animation: slideIn 0.18s ease;
+  }
+  .gmail-panel-header { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
+  .gmail-panel-header h3 { font-size: 13px; font-weight: 600; color: #922B21; flex: 1; }
+  .gmail-icon { width: 32px; height: 32px; background: #FADBD8; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: #EA4335; font-size: 15px; flex-shrink: 0; }
+  .preview-box { background: white; border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 1rem; font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre-wrap; font-family: 'Barlow', sans-serif; margin: 10px 0; max-height: 260px; overflow-y: auto; }
+  .preview-label { font-size: 11px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+
   /* ── BADGE ── */
   .badge {
     display: inline-flex; align-items: center;
@@ -423,6 +440,19 @@
       <div class="field">
         <label><i class="fa-solid fa-clipboard-list"></i> Descripción general</label>
         <input type="text" id="desc-general" placeholder="Ej: Inspección mensual de silos — Junio 2026">
+      </div>
+    </div>
+
+    <hr class="divider" style="margin-top:1rem;">
+
+    <div class="form-grid col-2">
+      <div class="field">
+        <label><i class="fa-solid fa-envelope"></i> Correo destinatario (gerencia)</label>
+        <input type="email" id="correo-dest" placeholder="gerencia@balanfarina.com">
+      </div>
+      <div class="field">
+        <label><i class="fa-solid fa-envelope-open-text"></i> CC (copia, opcional)</label>
+        <input type="email" id="correo-cc" placeholder="supervisor@balanfarina.com">
       </div>
     </div>
 
@@ -540,6 +570,9 @@
       </button>
       <button class="btn btn-gold" id="btn-zip" onclick="descargarZip()" style="display:none;">
         <i class="fa-solid fa-file-zipper"></i> Descargar ZIP completo
+      </button>
+      <button class="btn btn-gmail" id="btn-gmail-global" onclick="abrirGmailGlobal()" style="display:none;">
+        <i class="fa-solid fa-envelope"></i> Enviar informe por Gmail
       </button>
       <button class="btn btn-danger" id="btn-limpiar" onclick="limpiarTodo()" style="display:none;">
         <i class="fa-solid fa-trash"></i> Limpiar todo
@@ -899,6 +932,9 @@ async function generarTodas() {
         <a href="${url}" download="${fname}">
           <button class="btn btn-outline btn-sm"><i class="fa-solid fa-download"></i> Descargar</button>
         </a>
+        <button class="btn btn-gmail btn-sm" onclick="abrirGmailFoto(${i})">
+          <i class="fa-solid fa-envelope"></i> Gmail
+        </button>
       </div>`;
     document.getElementById('results-list').appendChild(item);
   }
@@ -906,6 +942,7 @@ async function generarTodas() {
   document.getElementById('prog-fill').style.width = '100%';
   document.getElementById('prog-label').textContent = `✔ ${photos.length} foto${photos.length>1?'s':''} generada${photos.length>1?'s':''} correctamente.`;
   document.getElementById('btn-zip').style.display = 'inline-flex';
+  document.getElementById('btn-gmail-global').style.display = 'inline-flex';
   document.getElementById('btn-generar').disabled = false;
   document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -926,6 +963,135 @@ async function descargarZip() {
   a.click();
 }
 
+function buildCuerpoFoto(p, idx) {
+  const empresa   = document.getElementById('empresa').value || 'BALANFARINA';
+  const area      = document.getElementById('area').value;
+  const zona      = document.getElementById('zona').value;
+  const elaborado = document.getElementById('elaborado').value;
+  const cargo     = document.getElementById('cargo').value;
+  const descGen   = document.getElementById('desc-general').value;
+  const fInforme  = formatFecha(document.getElementById('fecha-informe').value);
+  const fFoto     = formatFecha(p.fecha);
+  const zonaFinal = p.zona || zona;
+
+  const lineas = [
+    `Estimada Gerencia,`,
+    ``,
+    `Se adjunta el registro fotográfico correspondiente a la inspección realizada en ${empresa}.`,
+    ``,
+    `━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `DETALLE — FOTO ${String(idx+1).padStart(2,'0')}`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━`,
+    area      ? `Área:            ${area}` : '',
+    zonaFinal ? `Zona / Sector:   ${zonaFinal}` : '',
+    p.lugar   ? `Lugar:           ${p.lugar}` : '',
+    p.desc    ? `Descripción:     ${p.desc}` : '',
+    fFoto     ? `Fecha de foto:   ${fFoto}` : '',
+    p.obs     ? `\nObservaciones:\n${p.obs}` : '',
+    ``,
+    `━━━━━━━━━━━━━━━━━━━━━━━━`,
+    descGen   ? `Contexto general: ${descGen}` : '',
+    fInforme  ? `Fecha del informe: ${fInforme}` : '',
+    elaborado ? `Elaborado por:    ${elaborado}${cargo ? ', ' + cargo : ''}` : '',
+    ``,
+    `Nota: Las imágenes etiquetadas se adjuntan manualmente desde el ZIP descargado.`,
+    ``,
+    `Atentamente,`,
+    elaborado ? elaborado : empresa,
+    cargo     ? cargo     : '',
+    empresa,
+  ];
+  return lineas.filter(l => l !== '').join('\n');
+}
+
+function buildCuerpoGlobal() {
+  const empresa   = document.getElementById('empresa').value || 'BALANFARINA';
+  const area      = document.getElementById('area').value;
+  const zona      = document.getElementById('zona').value;
+  const elaborado = document.getElementById('elaborado').value;
+  const cargo     = document.getElementById('cargo').value;
+  const descGen   = document.getElementById('desc-general').value;
+  const fInforme  = formatFecha(document.getElementById('fecha-informe').value);
+
+  const resumen = photos.map((p, i) => {
+    const zonaFinal = p.zona || zona;
+    const fFoto = formatFecha(p.fecha);
+    const partes = [
+      `  Foto ${String(i+1).padStart(2,'0')}:`,
+      p.lugar   ? `    Lugar:         ${p.lugar}` : '',
+      zonaFinal ? `    Zona:          ${zonaFinal}` : '',
+      p.desc    ? `    Descripción:   ${p.desc}` : '',
+      fFoto     ? `    Fecha:         ${fFoto}` : '',
+      p.obs     ? `    Observaciones: ${p.obs}` : '',
+    ];
+    return partes.filter(Boolean).join('\n');
+  }).join('\n\n');
+
+  const lineas = [
+    `Estimada Gerencia,`,
+    ``,
+    `Remito el informe fotográfico de inspección de ${empresa}${area ? ' — ' + area : ''}.`,
+    `A continuación el resumen de ${photos.length} fotografía${photos.length>1?'s':''} registradas:`,
+    ``,
+    `━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `RESUMEN GENERAL`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━`,
+    resumen,
+    ``,
+    `━━━━━━━━━━━━━━━━━━━━━━━━`,
+    descGen  ? `Contexto: ${descGen}` : '',
+    fInforme ? `Fecha del informe: ${fInforme}` : '',
+    elaborado ? `Elaborado por: ${elaborado}${cargo ? ', ' + cargo : ''}` : '',
+    ``,
+    `Nota: Las imágenes etiquetadas se adjuntan desde el archivo ZIP descargado.`,
+    ``,
+    `Atentamente,`,
+    elaborado ? elaborado : empresa,
+    cargo     ? cargo     : '',
+    empresa,
+  ];
+  return lineas.filter(l => l !== '').join('\n');
+}
+
+function abrirGmailFoto(idx) {
+  const p       = photos[idx];
+  const empresa = document.getElementById('empresa').value || 'BALANFARINA';
+  const area    = document.getElementById('area').value;
+  const dest    = document.getElementById('correo-dest').value;
+  const cc      = document.getElementById('correo-cc').value;
+  const fInforme= formatFecha(document.getElementById('fecha-informe').value);
+
+  const asunto  = `[${empresa}] Registro fotográfico${area?' — '+area:''} — Foto ${String(idx+1).padStart(2,'0')}${p.lugar?' | '+p.lugar:''}${fInforme?' | '+fInforme:''}`;
+  const cuerpo  = buildCuerpoFoto(p, idx);
+
+  const params = new URLSearchParams();
+  if (dest) params.set('to', dest);
+  if (cc)   params.set('cc', cc);
+  params.set('su', asunto);
+  params.set('body', cuerpo);
+
+  window.open(`https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`, '_blank');
+}
+
+function abrirGmailGlobal() {
+  const empresa = document.getElementById('empresa').value || 'BALANFARINA';
+  const area    = document.getElementById('area').value;
+  const dest    = document.getElementById('correo-dest').value;
+  const cc      = document.getElementById('correo-cc').value;
+  const fInforme= formatFecha(document.getElementById('fecha-informe').value);
+
+  const asunto  = `[${empresa}] Informe fotográfico completo${area?' — '+area:''}${fInforme?' | '+fInforme:''} — ${photos.length} foto${photos.length>1?'s':''}`;
+  const cuerpo  = buildCuerpoGlobal();
+
+  const params = new URLSearchParams();
+  if (dest) params.set('to', dest);
+  if (cc)   params.set('cc', cc);
+  params.set('su', asunto);
+  params.set('body', cuerpo);
+
+  window.open(`https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`, '_blank');
+}
+
 function limpiarTodo() {
   if (!confirm('¿Seguro que deseas limpiar todas las fotos y resultados?')) return;
   photos = []; generatedBlobs = []; editingIdx = null;
@@ -933,6 +1099,7 @@ function limpiarTodo() {
   document.getElementById('edit-panel').style.display = 'none';
   document.getElementById('results-section').innerHTML = '';
   document.getElementById('btn-zip').style.display = 'none';
+  document.getElementById('btn-gmail-global').style.display = 'none';
   document.getElementById('btn-limpiar').style.display = 'none';
   document.getElementById('prog-wrap').style.display = 'none';
   document.getElementById('prog-label').textContent = '';
