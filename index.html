@@ -3,1108 +3,409 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro Fotográfico — BALANFARINA</title>
+<title>Galería de Fotos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0B2545;
-    --navy-mid: #163A6B;
-    --blue: #1A6BB5;
-    --blue-light: #2A82D6;
-    --gold: #C8A84B;
-    --gold-light: #E5C96E;
-    --cream: #F7F4EE;
-    --white: #FFFFFF;
-    --gray-50: #F5F6F8;
-    --gray-100: #EAECEF;
-    --gray-300: #BEC5CE;
-    --gray-500: #6E7A8A;
-    --gray-700: #3D4754;
-    --text: #1A2332;
-    --radius: 10px;
-    --radius-sm: 6px;
-    --shadow-card: 0 2px 12px rgba(11,37,69,0.10);
-    --shadow-lift: 0 6px 24px rgba(11,37,69,0.16);
+  /* ============================================================
+     CONFIGURACIÓN VISUAL
+     ============================================================ */
+  :root{
+    --canvas:   #f3f5f1;
+    --surface:  #ffffff;
+    --ink:      #1a1d1a;
+    --muted:    #6b7269;
+    --line:     #e2e6df;
+    --accent:   #2e6f4e;
+    --accent-2: #245a3f;
+    --danger:   #b4452e;
+    --radius:   14px;
+    --shadow:   0 1px 2px rgba(26,29,26,.04), 0 8px 24px rgba(26,29,26,.06);
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
 
-  body {
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    color: var(--text);
-    background: var(--gray-50);
-    min-height: 100vh;
-  }
-
-  /* ── HEADER ── */
-  header {
-    background: var(--navy);
-    border-bottom: 3px solid var(--gold);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    height: 68px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .logo-mark {
-    width: 40px; height: 40px;
-    background: var(--gold);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .logo-mark i { color: var(--navy); font-size: 20px; }
-  .header-text h1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 20px; font-weight: 700;
-    color: var(--white);
-    letter-spacing: 0.04em;
-    line-height: 1.1;
-  }
-  .header-text p { font-size: 11px; color: var(--gold-light); letter-spacing: 0.05em; }
-  .header-spacer { flex: 1; }
-  .header-badge {
-    background: var(--navy-mid);
-    border: 1px solid rgba(200,168,75,0.3);
-    border-radius: var(--radius-sm);
-    padding: 6px 14px;
-    font-size: 12px;
-    color: var(--gold-light);
-    font-weight: 500;
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--canvas);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
   }
 
-  /* ── LAYOUT ── */
-  .container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+  .wrap{ max-width:1140px; margin:0 auto; padding:0 20px; }
 
-  .section-card {
-    background: var(--white);
-    border: 1px solid var(--gray-100);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
-    box-shadow: var(--shadow-card);
+  /* ---------- Encabezado ---------- */
+  header{
+    padding:40px 0 28px;
+    border-bottom:1px solid var(--line);
   }
-  .section-header {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.875rem;
-    border-bottom: 1px solid var(--gray-100);
+  .brand{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(28px,5vw,42px);
+    letter-spacing:-.01em;
+    line-height:1;
   }
-  .section-icon {
-    width: 32px; height: 32px;
-    background: #EEF5FD;
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--blue);
-    font-size: 15px;
-    flex-shrink: 0;
-  }
-  .section-header h2 { font-size: 14px; font-weight: 600; color: var(--navy); }
-  .section-header p { font-size: 12px; color: var(--gray-500); margin-top: 1px; }
-  .section-header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .brand .dot{ color:var(--accent); }
+  .tagline{ color:var(--muted); margin-top:8px; font-size:15px; }
 
-  /* ── LOCK TOGGLE ── */
-  .lock-toggle {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--gray-500);
-    cursor: pointer; user-select: none;
+  /* ---------- Tarjeta de subida ---------- */
+  .uploader{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    margin:28px 0 36px;
+    box-shadow:var(--shadow);
   }
-  .lock-toggle input { display: none; }
-  .lock-pill {
-    width: 36px; height: 20px;
-    background: var(--gray-300);
-    border-radius: 99px;
-    position: relative;
-    transition: background 0.2s;
-    flex-shrink: 0;
+  .drop{
+    border:2px dashed var(--line);
+    border-radius:12px;
+    padding:34px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
   }
-  .lock-pill::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 3px;
-    width: 14px; height: 14px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.2s;
-  }
-  .lock-toggle input:checked + .lock-pill { background: var(--blue); }
-  .lock-toggle input:checked + .lock-pill::after { transform: translateX(16px); }
+  .drop:hover, .drop.drag{ border-color:var(--accent); background:#f4faf6; }
+  .drop strong{ color:var(--accent); }
+  .drop p{ color:var(--muted); font-size:14px; margin-top:6px; }
+  .drop .icon{ font-size:30px; line-height:1; }
+  input[type=file]{ display:none; }
 
-  /* ── FORM GRID ── */
-  .form-grid { display: grid; gap: 12px; }
-  .col-2 { grid-template-columns: 1fr 1fr; }
-  .col-3 { grid-template-columns: 1fr 1fr 1fr; }
-  .col-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-  @media (max-width: 640px) {
-    .col-2, .col-3, .col-4 { grid-template-columns: 1fr; }
+  .field{ margin-top:16px; }
+  .field label{ display:block; font-size:13px; font-weight:500; color:var(--muted); margin-bottom:6px; }
+  .field input[type=text]{
+    width:100%;
+    padding:11px 13px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    font:inherit;
+    color:var(--ink);
+    background:var(--canvas);
   }
-  .field { display: flex; flex-direction: column; gap: 4px; }
-  .field label {
-    font-size: 11px; font-weight: 600;
-    color: var(--gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .field input, .field textarea, .field select {
-    font-family: 'Barlow', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--gray-50);
-    border: 1.5px solid var(--gray-100);
-    border-radius: var(--radius-sm);
-    padding: 9px 12px;
-    outline: none;
-    transition: border-color 0.18s, background 0.18s;
-    width: 100%;
-  }
-  .field input:focus, .field textarea:focus, .field select:focus {
-    border-color: var(--blue);
-    background: white;
-  }
-  .field input:disabled, .field textarea:disabled, .field select:disabled {
-    opacity: 0.55; cursor: not-allowed; background: var(--gray-100);
-  }
-  .field textarea { height: 72px; resize: vertical; }
-  .field select { cursor: pointer; }
+  .field input:focus{ outline:2px solid var(--accent); outline-offset:1px; border-color:transparent; }
 
-  /* ── DROP ZONE ── */
-  .drop-zone {
-    border: 2px dashed var(--gray-300);
-    border-radius: var(--radius);
-    padding: 2rem 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    color: var(--gray-500);
+  .row{ display:flex; align-items:center; gap:14px; margin-top:18px; flex-wrap:wrap; }
+  button.primary{
+    font:inherit; font-weight:600;
+    background:var(--accent); color:#fff;
+    border:none; border-radius:10px;
+    padding:11px 22px; cursor:pointer;
+    transition:background .15s, transform .05s;
   }
-  .drop-zone:hover { border-color: var(--blue); background: #F0F6FD; }
-  .drop-zone.dragover { border-color: var(--blue); background: #E6F0FB; }
-  .drop-zone i { font-size: 2.2rem; color: var(--gray-300); display: block; margin-bottom: 10px; }
-  .drop-zone strong { display: block; font-size: 15px; font-weight: 600; color: var(--navy-mid); margin-bottom: 4px; }
-  .drop-zone span { font-size: 12px; color: var(--gray-500); }
+  button.primary:hover{ background:var(--accent-2); }
+  button.primary:active{ transform:translateY(1px); }
+  button.primary:disabled{ background:#a9b3ab; cursor:default; }
+  .status{ font-size:14px; color:var(--muted); }
+  .status.err{ color:var(--danger); }
 
-  /* ── PHOTO GRID ── */
-  .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-    margin-top: 1rem;
+  .queue{ list-style:none; margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .queue li{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    font-size:13px; padding:8px 12px; background:var(--canvas);
+    border:1px solid var(--line); border-radius:9px;
   }
-  .photo-card {
-    border: 1.5px solid var(--gray-100);
-    border-radius: var(--radius);
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color 0.18s, box-shadow 0.18s;
-    position: relative;
-    background: white;
-  }
-  .photo-card:hover { border-color: var(--blue-light); box-shadow: var(--shadow-lift); }
-  .photo-card.active { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,107,181,0.18); }
-  .photo-card.done { border-color: #27AE60; }
-  .photo-card img { width: 100%; height: 108px; object-fit: cover; display: block; }
-  .photo-card .pc-body { padding: 8px 10px; }
-  .photo-card .pc-num { font-size: 10px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em; }
-  .photo-card .pc-lugar { font-size: 12px; font-weight: 500; color: var(--navy); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .photo-card .pc-obs { font-size: 11px; color: var(--gray-500); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .photo-card .pc-status {
-    position: absolute; top: 6px; right: 6px;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: rgba(255,255,255,0.9);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-  }
-  .photo-card.done .pc-status { color: #27AE60; }
-  .photo-card:not(.done) .pc-status { color: var(--gray-300); }
-  .photo-card .pc-del {
-    position: absolute; top: 6px; left: 6px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: rgba(0,0,0,0.5);
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 11px;
-    opacity: 0; transition: opacity 0.15s;
-  }
-  .photo-card:hover .pc-del { opacity: 1; }
+  .queue .tag{ font-weight:500; }
+  .queue .ok{ color:var(--accent); }
+  .queue .bad{ color:var(--danger); }
 
-  /* ── EDIT PANEL ── */
-  .edit-panel {
-    background: #F0F6FD;
-    border: 1.5px solid #C5DDFA;
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    margin-top: 1rem;
-    animation: slideIn 0.18s ease;
+  /* ---------- Galería ---------- */
+  .gallery-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:18px; gap:12px; flex-wrap:wrap;
   }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-  .edit-panel-header {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 1rem;
-  }
-  .edit-panel-header h3 { font-size: 13px; font-weight: 600; color: var(--navy); flex: 1; }
+  .gallery-head h2{ font-family:'Fraunces',serif; font-weight:600; font-size:22px; }
+  .count{ color:var(--muted); font-size:14px; }
 
-  /* ── BUTTONS ── */
-  .btn {
-    display: inline-flex; align-items: center; gap: 7px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 13px; font-weight: 600;
-    padding: 9px 18px;
-    border-radius: var(--radius-sm);
-    border: none; cursor: pointer;
-    transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
-    text-decoration: none;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn-primary { background: var(--navy); color: white; box-shadow: var(--shadow-card); }
-  .btn-primary:hover { background: var(--navy-mid); box-shadow: var(--shadow-lift); }
-  .btn-gold { background: var(--gold); color: var(--navy); box-shadow: var(--shadow-card); }
-  .btn-gold:hover { background: var(--gold-light); }
-  .btn-outline { background: white; color: var(--navy); border: 1.5px solid var(--gray-100); }
-  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
-  .btn-danger { background: white; color: #C0392B; border: 1.5px solid #FADBD8; }
-  .btn-danger:hover { background: #FDEDEC; }
-  .btn-sm { font-size: 12px; padding: 7px 14px; }
-  .btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .grid{ column-count:4; column-gap:16px; }
+  @media (max-width:980px){ .grid{ column-count:3; } }
+  @media (max-width:680px){ .grid{ column-count:2; } }
+  @media (max-width:420px){ .grid{ column-count:1; } }
 
-  /* ── PROGRESS ── */
-  .progress-wrap { margin: 1rem 0 0; }
-  .progress-track {
-    height: 6px;
-    background: var(--gray-100);
-    border-radius: 99px;
-    overflow: hidden;
-    margin-bottom: 6px;
+  .card{
+    break-inside:avoid;
+    margin-bottom:16px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    cursor:zoom-in;
+    transition:transform .15s, box-shadow .15s;
   }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--blue) 0%, var(--blue-light) 100%);
-    border-radius: 99px;
-    transition: width 0.35s ease;
-    width: 0%;
-  }
-  .progress-label { font-size: 12px; color: var(--gray-500); }
+  .card:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(26,29,26,.12); }
+  .card img{ width:100%; display:block; background:#eef0ec; }
+  .card .meta{ padding:11px 13px 13px; }
+  .card .meta .name{ font-weight:600; font-size:14px; word-break:break-word; }
+  .card .meta .desc{ color:var(--muted); font-size:13px; margin-top:3px; word-break:break-word; }
+  .card .meta .date{ color:var(--muted); font-size:11.5px; margin-top:7px; }
 
-  /* ── RESULTS ── */
-  .results-header {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 1rem;
-  }
-  .result-item {
-    display: flex; align-items: center; gap: 12px;
-    background: white;
-    border: 1px solid var(--gray-100);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    box-shadow: var(--shadow-card);
-  }
-  .result-item img { width: 64px; height: 48px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; }
-  .result-item .ri-info { flex: 1; min-width: 0; }
-  .result-item .ri-name { font-size: 13px; font-weight: 600; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .result-item .ri-meta { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
-  .result-item .ri-actions { flex-shrink: 0; display: flex; gap: 6px; }
-
-  /* ── GMAIL ── */
-  .btn-gmail { background: #EA4335; color: white; border: none; box-shadow: var(--shadow-card); }
-  .btn-gmail:hover { background: #C5221F; box-shadow: var(--shadow-lift); }
-  .gmail-panel {
-    background: #FEF8F8;
-    border: 1.5px solid #FADBD8;
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    margin-top: 1rem;
-    animation: slideIn 0.18s ease;
-  }
-  .gmail-panel-header { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
-  .gmail-panel-header h3 { font-size: 13px; font-weight: 600; color: #922B21; flex: 1; }
-  .gmail-icon { width: 32px; height: 32px; background: #FADBD8; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: #EA4335; font-size: 15px; flex-shrink: 0; }
-  .preview-box { background: white; border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 1rem; font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre-wrap; font-family: 'Barlow', sans-serif; margin: 10px 0; max-height: 260px; overflow-y: auto; }
-  .preview-label { font-size: 11px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-
-  /* ── BADGE ── */
-  .badge {
-    display: inline-flex; align-items: center;
-    font-size: 11px; font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 99px;
-    letter-spacing: 0.04em;
-  }
-  .badge-blue { background: #EEF5FD; color: var(--blue); }
-  .badge-gold { background: #FBF6E9; color: #8B6914; }
-  .badge-green { background: #EAFAF1; color: #1E8449; }
-  .badge-gray { background: var(--gray-100); color: var(--gray-500); }
-
-  /* ── DIVIDER ── */
-  .divider { border: none; border-top: 1px solid var(--gray-100); margin: 1rem 0; }
-
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    font-size: 11px;
-    color: var(--gray-300);
-    padding: 1.5rem;
-    border-top: 1px solid var(--gray-100);
-    margin-top: 2rem;
+  .empty, .loading{
+    text-align:center; color:var(--muted);
+    padding:60px 20px; font-size:15px;
+    border:1px dashed var(--line); border-radius:var(--radius);
   }
 
-  canvas { display: none; }
-  #file-input { display: none; }
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0; z-index:50;
+    background:rgba(13,15,13,.92);
+    display:none; align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:82vh; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+  .lightbox .cap{ position:absolute; bottom:18px; left:0; right:0; text-align:center; color:#e8ebe6; font-size:14px; padding:0 24px; }
+  .lightbox .close{
+    position:absolute; top:18px; right:22px;
+    background:none; border:none; color:#fff;
+    font-size:34px; line-height:1; cursor:pointer; opacity:.8;
+  }
+  .lightbox .close:hover{ opacity:1; }
 
-  /* TOOLTIP */
-  [data-tip] { position: relative; cursor: default; }
-  [data-tip]:hover::after {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--navy);
-    color: white;
-    font-size: 11px;
-    padding: 5px 10px;
-    border-radius: var(--radius-sm);
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 200;
+  footer{ color:var(--muted); font-size:12.5px; text-align:center; padding:36px 0 30px; }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ transition:none !important; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-mark"><i class="fa-solid fa-wheat-awn"></i></div>
-  <div class="header-text">
-    <h1>BALANFARINA</h1>
-    <p>Sistema de registro fotográfico</p>
+  <div class="wrap">
+    <div class="brand">Galería<span class="dot">.</span></div>
+    <p class="tagline">Sube tus fotos y velas al instante. Almacenadas en Drive, registradas en tu hoja de cálculo.</p>
   </div>
-  <div class="header-spacer"></div>
-  <div class="header-badge" id="header-badge"><i class="fa-solid fa-layer-group"></i> 0 fotos</div>
 </header>
 
-<div class="container">
+<main class="wrap">
 
-  <!-- ── DATOS COMUNES ── -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon"><i class="fa-solid fa-building"></i></div>
-      <div>
-        <h2>Datos institucionales</h2>
-        <p>Se imprimen en todas las fotos — activa el candado para no editarlos por accidente</p>
-      </div>
-      <div class="section-header-right">
-        <label class="lock-toggle" data-tip="Bloquear campos comunes">
-          <input type="checkbox" id="lock-toggle" onchange="toggleLock()">
-          <span class="lock-pill"></span>
-          <span id="lock-label">Editable</span>
-        </label>
-      </div>
+  <!-- ====== SUBIR ====== -->
+  <section class="uploader">
+    <label class="drop" id="drop">
+      <div class="icon">↑</div>
+      <div><strong>Elige fotos</strong> o arrástralas aquí</div>
+      <p>JPG, PNG o WEBP — puedes seleccionar varias a la vez</p>
+      <input type="file" id="file" accept="image/*" multiple>
+    </label>
+
+    <div class="field">
+      <label for="desc">Descripción (opcional, se aplica a esta carga)</label>
+      <input type="text" id="desc" placeholder="Ej.: Inspección bodega — junio">
     </div>
 
-    <div class="form-grid col-4" style="margin-bottom:12px;">
-      <div class="field">
-        <label><i class="fa-solid fa-industry"></i> Empresa</label>
-        <input type="text" id="empresa" value="BALANFARINA">
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-layer-group"></i> Área</label>
-        <input type="text" id="area" value="Silos">
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-map-location-dot"></i> Zona</label>
-        <input type="text" id="zona" placeholder="Ej: Zona Norte, Piso 2…">
-      </div>
-      <div class="field">
-        <label><i class="fa-regular fa-calendar"></i> Fecha del informe</label>
-        <input type="date" id="fecha-informe">
-      </div>
+    <div class="row">
+      <button class="primary" id="btn" disabled>Subir fotos</button>
+      <span class="status" id="status">Aún no has elegido fotos.</span>
     </div>
 
-    <div class="form-grid col-3">
-      <div class="field">
-        <label><i class="fa-solid fa-user-tie"></i> Elaborado por</label>
-        <input type="text" id="elaborado" placeholder="Nombre del responsable">
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-id-badge"></i> Cargo</label>
-        <input type="text" id="cargo" placeholder="Ej: Supervisor de planta">
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-clipboard-list"></i> Descripción general</label>
-        <input type="text" id="desc-general" placeholder="Ej: Inspección mensual de silos — Junio 2026">
-      </div>
+    <ul class="queue" id="queue"></ul>
+  </section>
+
+  <!-- ====== GALERÍA ====== -->
+  <section>
+    <div class="gallery-head">
+      <h2>Tus fotos</h2>
+      <span class="count" id="count"></span>
     </div>
-
-    <hr class="divider" style="margin-top:1rem;">
-
-    <div class="form-grid col-2">
-      <div class="field">
-        <label><i class="fa-solid fa-envelope"></i> Correo destinatario (gerencia)</label>
-        <input type="email" id="correo-dest" placeholder="gerencia@balanfarina.com">
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-envelope-open-text"></i> CC (copia, opcional)</label>
-        <input type="email" id="correo-cc" placeholder="supervisor@balanfarina.com">
-      </div>
+    <div id="galleryHost">
+      <div class="loading" id="loading">Cargando fotos…</div>
+      <div class="grid" id="grid" style="display:none"></div>
     </div>
+  </section>
 
-    <hr class="divider">
+</main>
 
-    <div class="form-grid col-3">
-      <div class="field">
-        <label><i class="fa-solid fa-palette"></i> Estilo de etiqueta</label>
-        <select id="estilo">
-          <option value="navy">Azul marino (institucional)</option>
-          <option value="dark">Negro</option>
-          <option value="light">Blanco</option>
-        </select>
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-text-height"></i> Posición de la etiqueta</label>
-        <select id="posicion">
-          <option value="both">Cabecera + pie</option>
-          <option value="bottom">Solo pie</option>
-          <option value="overlay">Superpuesta al fondo</option>
-        </select>
-      </div>
-      <div class="field">
-        <label><i class="fa-solid fa-image"></i> Calidad de exportación</label>
-        <select id="calidad">
-          <option value="0.95">Alta (recomendado)</option>
-          <option value="0.80">Media</option>
-          <option value="0.65">Comprimida</option>
-        </select>
-      </div>
-    </div>
-  </div>
+<footer class="wrap">Galería de fotos · GitHub Pages + Google Apps Script</footer>
 
-  <!-- ── FOTOS ── -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon"><i class="fa-solid fa-images"></i></div>
-      <div>
-        <h2>Fotografías</h2>
-        <p>Haz clic en cada foto para completar sus datos específicos</p>
-      </div>
-      <div class="section-header-right">
-        <span class="badge badge-blue" id="count-badge">0 fotos</span>
-      </div>
-    </div>
-
-    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-      <i class="fa-solid fa-cloud-arrow-up"></i>
-      <strong>Arrastra fotos aquí o haz clic para seleccionar</strong>
-      <span>Puedes seleccionar varias a la vez · JPG, PNG, WEBP</span>
-    </div>
-    <input type="file" id="file-input" accept="image/*" multiple>
-
-    <div class="photo-grid" id="photo-grid"></div>
-
-    <!-- Panel de edición individual -->
-    <div class="edit-panel" id="edit-panel" style="display:none;">
-      <div class="edit-panel-header">
-        <div class="section-icon" style="width:26px;height:26px;font-size:13px;"><i class="fa-solid fa-pen"></i></div>
-        <h3 id="edit-panel-title">Editando foto 1</h3>
-        <button class="btn btn-sm btn-outline" onclick="cerrarEdit()" style="margin-left:auto;">
-          <i class="fa-solid fa-xmark"></i> Cerrar
-        </button>
-      </div>
-
-      <div class="form-grid col-3" style="margin-bottom:10px;">
-        <div class="field">
-          <label><i class="fa-solid fa-map-pin"></i> Lugar específico</label>
-          <input type="text" id="edit-lugar" placeholder="Ej: Silo 3 — compuerta norte">
-        </div>
-        <div class="field">
-          <label><i class="fa-solid fa-map-location-dot"></i> Zona / Sector</label>
-          <input type="text" id="edit-zona" placeholder="Se copia del global si está vacío">
-        </div>
-        <div class="field">
-          <label><i class="fa-regular fa-calendar"></i> Fecha de la foto</label>
-          <input type="date" id="edit-fecha">
-        </div>
-      </div>
-
-      <div class="form-grid col-2" style="margin-bottom:10px;">
-        <div class="field">
-          <label><i class="fa-solid fa-align-left"></i> Descripción</label>
-          <input type="text" id="edit-desc" placeholder="Descripción específica de esta foto">
-        </div>
-        <div class="field">
-          <label><i class="fa-solid fa-note-sticky"></i> Observaciones</label>
-          <textarea id="edit-obs" placeholder="Hallazgos, condiciones observadas, acción requerida…"></textarea>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary btn-sm" onclick="guardarEdicion()">
-          <i class="fa-solid fa-floppy-disk"></i> Guardar y siguiente
-        </button>
-        <button class="btn btn-outline btn-sm" onclick="copiarAlSiguiente()" data-tip="Copia lugar, zona y descripción a la foto siguiente">
-          <i class="fa-solid fa-copy"></i> Copiar al siguiente
-        </button>
-        <button class="btn btn-outline btn-sm" onclick="aplicarATodos()" data-tip="Aplica lugar y observaciones a todas las fotos">
-          <i class="fa-solid fa-layer-group"></i> Aplicar a todas
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── ACCIONES ── -->
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-icon"><i class="fa-solid fa-gears"></i></div>
-      <div><h2>Generar informe fotográfico</h2></div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" id="btn-generar" onclick="generarTodas()">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Generar todas las fotos etiquetadas
-      </button>
-      <button class="btn btn-gold" id="btn-zip" onclick="descargarZip()" style="display:none;">
-        <i class="fa-solid fa-file-zipper"></i> Descargar ZIP completo
-      </button>
-      <button class="btn btn-gmail" id="btn-gmail-global" onclick="abrirGmailGlobal()" style="display:none;">
-        <i class="fa-solid fa-envelope"></i> Enviar informe por Gmail
-      </button>
-      <button class="btn btn-danger" id="btn-limpiar" onclick="limpiarTodo()" style="display:none;">
-        <i class="fa-solid fa-trash"></i> Limpiar todo
-      </button>
-    </div>
-
-    <div class="progress-wrap" id="prog-wrap" style="display:none;">
-      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
-      <div class="progress-label" id="prog-label"></div>
-    </div>
-  </div>
-
-  <!-- ── RESULTADOS ── -->
-  <div id="results-section"></div>
-
+<!-- ====== LIGHTBOX ====== -->
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lbClose" aria-label="Cerrar">×</button>
+  <img id="lbImg" alt="">
+  <div class="cap" id="lbCap"></div>
 </div>
 
-<footer>BALANFARINA · Sistema de Registro Fotográfico · Procesamiento 100% local — ninguna imagen se sube a internet</footer>
-
-<canvas id="work-canvas"></canvas>
-
 <script>
-const TODAY = new Date().toISOString().split('T')[0];
-document.getElementById('fecha-informe').value = TODAY;
+/* ============================================================
+   CONFIGURACIÓN  —  pega aquí la URL de tu Web App de Apps Script
+   (Implementar > Nueva implementación > Aplicación web)
+   ============================================================ */
+const API_URL = 'PEGA_AQUI_LA_URL_DE_TU_WEB_APP';
 
-let photos = [];
-let editingIdx = null;
-let generatedBlobs = [];
-let locked = false;
+const MAX_LADO = 1600;   // px: redimensiona la foto antes de subir
+const CALIDAD  = 0.85;   // calidad JPEG (0–1)
 
-// ── Lock ──
-function toggleLock() {
-  locked = document.getElementById('lock-toggle').checked;
-  const ids = ['empresa','area','zona','fecha-informe','elaborado','cargo','desc-general','estilo','posicion','calidad'];
-  ids.forEach(id => document.getElementById(id).disabled = locked);
-  document.getElementById('lock-label').textContent = locked ? 'Bloqueado' : 'Editable';
+const $ = (id) => document.getElementById(id);
+let archivos = [];
+
+/* ---------- Selección de archivos ---------- */
+const drop = $('drop'), file = $('file');
+file.addEventListener('change', () => setArchivos(file.files));
+
+['dragover','dragenter'].forEach(ev =>
+  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev =>
+  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+drop.addEventListener('drop', e => setArchivos(e.dataTransfer.files));
+
+function setArchivos(lista){
+  archivos = Array.from(lista).filter(f => f.type.startsWith('image/'));
+  $('btn').disabled = archivos.length === 0;
+  $('status').className = 'status';
+  $('status').textContent = archivos.length
+    ? `${archivos.length} foto(s) lista(s) para subir.`
+    : 'Aún no has elegido fotos.';
+  $('queue').innerHTML = '';
 }
 
-// ── Drop zone ──
-const dz = document.getElementById('drop-zone');
-const fi = document.getElementById('file-input');
-fi.addEventListener('change', e => addFiles(Array.from(e.target.files)));
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('dragover');
-  addFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+/* ---------- Comprimir / redimensionar ---------- */
+function procesar(f){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width:w, height:h } = img;
+      if (w > MAX_LADO || h > MAX_LADO){
+        const r = Math.min(MAX_LADO/w, MAX_LADO/h);
+        w = Math.round(w*r); h = Math.round(h*r);
+      }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = c.toDataURL('image/jpeg', CALIDAD);
+      res(dataUrl.split(',')[1]); // solo el base64
+    };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(f);
+  });
+}
+
+/* ---------- Subir ---------- */
+$('btn').addEventListener('click', async () => {
+  if (!archivos.length) return;
+  if (API_URL.startsWith('PEGA_AQUI')){
+    setError('Falta configurar API_URL en el HTML con la URL de tu Web App.');
+    return;
+  }
+
+  $('btn').disabled = true;
+  const desc = $('desc').value.trim();
+  const q = $('queue'); q.innerHTML = '';
+  let exitos = 0;
+
+  for (const f of archivos){
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="tag">${f.name}</span><span class="state">Procesando…</span>`;
+    q.appendChild(li);
+    const estado = li.querySelector('.state');
+
+    try{
+      const base64 = await procesar(f);
+      estado.textContent = 'Subiendo…';
+      const r = await fetch(API_URL, {
+        method: 'POST',
+        // Sin Content-Type personalizado: el navegador usa text/plain
+        // y así NO se dispara el preflight (OPTIONS) que rompe el CORS de Apps Script.
+        body: JSON.stringify({
+          nombre: f.name.replace(/\.[^.]+$/, '') + '.jpg',
+          mimeType: 'image/jpeg',
+          base64: base64,
+          descripcion: desc
+        })
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || 'Error del servidor');
+      estado.textContent = '✓ Subida'; estado.className = 'state ok';
+      exitos++;
+    }catch(err){
+      estado.textContent = '✗ ' + (err.message || 'Error'); estado.className = 'state bad';
+    }
+  }
+
+  $('status').className = 'status';
+  $('status').textContent = `${exitos} de ${archivos.length} foto(s) subida(s).`;
+  $('desc').value = '';
+  archivos = []; file.value = '';
+  $('btn').disabled = true;
+  cargarGaleria();
 });
 
-function addFiles(files) {
-  files.forEach(f => {
-    const url = URL.createObjectURL(f);
-    photos.push({ file: f, url, lugar: '', zona: '', fecha: TODAY, desc: '', obs: '' });
-  });
-  renderGrid(); fi.value = '';
-  document.getElementById('btn-limpiar').style.display = photos.length ? 'inline-flex' : 'none';
+/* ---------- Cargar galería ---------- */
+async function cargarGaleria(){
+  $('loading').style.display = '';
+  $('loading').textContent = 'Cargando fotos…';
+  $('grid').style.display = 'none';
+
+  if (API_URL.startsWith('PEGA_AQUI')){
+    $('loading').textContent = 'Configura API_URL en el HTML para ver tus fotos.';
+    return;
+  }
+
+  try{
+    const r = await fetch(API_URL + '?action=list');
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error);
+    render(data.fotos || []);
+  }catch(err){
+    $('loading').textContent = 'No se pudo cargar la galería: ' + err.message;
+  }
 }
 
-function renderGrid() {
-  const grid = document.getElementById('photo-grid');
-  const n = photos.length;
-  document.getElementById('count-badge').textContent = n + (n===1?' foto':' fotos');
-  document.getElementById('header-badge').innerHTML = `<i class="fa-solid fa-layer-group"></i> ${n} foto${n!==1?'s':''}`;
+function render(fotos){
+  const grid = $('grid');
+  $('count').textContent = fotos.length ? `${fotos.length} foto(s)` : '';
   grid.innerHTML = '';
-  photos.forEach((p, i) => {
-    const done = p.lugar || p.obs;
+
+  if (!fotos.length){
+    $('loading').style.display = '';
+    $('loading').className = 'empty';
+    $('loading').textContent = 'Todavía no hay fotos. Sube la primera arriba.';
+    return;
+  }
+
+  $('loading').style.display = 'none';
+  grid.style.display = '';
+
+  fotos.forEach(ft => {
     const card = document.createElement('div');
-    card.className = 'photo-card' + (editingIdx===i?' active':'') + (done?' done':'');
+    card.className = 'card';
+    const fecha = ft.fecha ? new Date(ft.fecha).toLocaleString('es-EC',
+      { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
     card.innerHTML = `
-      <img src="${p.url}" alt="Foto ${i+1}">
-      <button class="pc-del" onclick="removePhoto(event,${i})" title="Eliminar"><i class="fa-solid fa-xmark"></i></button>
-      <div class="pc-status"><i class="fa-solid ${done?'fa-circle-check':'fa-circle'}"></i></div>
-      <div class="pc-body">
-        <div class="pc-num">Foto ${String(i+1).padStart(2,'0')}</div>
-        <div class="pc-lugar">${p.lugar || '<span style="color:#BEC5CE">Sin datos — clic para editar</span>'}</div>
-        <div class="pc-obs">${p.obs||p.desc||''}</div>
+      <img loading="lazy" src="${ft.url}" alt="${(ft.nombre||'Foto')}"
+           onerror="this.style.opacity=.4;this.alt='No se pudo cargar';">
+      <div class="meta">
+        <div class="name">${ft.nombre || 'Sin nombre'}</div>
+        ${ft.descripcion ? `<div class="desc">${ft.descripcion}</div>` : ''}
+        <div class="date">${fecha}</div>
       </div>`;
-    card.addEventListener('click', e => { if (!e.target.closest('.pc-del')) openEdit(i); });
+    card.addEventListener('click', () => abrirLightbox(ft));
     grid.appendChild(card);
   });
 }
 
-function removePhoto(e, idx) {
-  e.stopPropagation();
-  photos.splice(idx, 1);
-  if (editingIdx === idx) { editingIdx = null; document.getElementById('edit-panel').style.display = 'none'; }
-  else if (editingIdx > idx) editingIdx--;
-  renderGrid();
-  document.getElementById('btn-limpiar').style.display = photos.length ? 'inline-flex' : 'none';
+/* ---------- Lightbox ---------- */
+const lb = $('lightbox');
+function abrirLightbox(ft){
+  $('lbImg').src = ft.url;
+  $('lbImg').alt = ft.nombre || '';
+  $('lbCap').textContent = [ft.nombre, ft.descripcion].filter(Boolean).join(' — ');
+  lb.classList.add('open');
+}
+function cerrar(){ lb.classList.remove('open'); $('lbImg').src = ''; }
+$('lbClose').addEventListener('click', cerrar);
+lb.addEventListener('click', e => { if (e.target === lb) cerrar(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrar(); });
+
+function setError(msg){
+  $('status').className = 'status err';
+  $('status').textContent = msg;
 }
 
-function openEdit(idx) {
-  editingIdx = idx;
-  const p = photos[idx];
-  document.getElementById('edit-panel-title').textContent =
-    `Editando foto ${idx+1} de ${photos.length} — ${p.file.name}`;
-  document.getElementById('edit-lugar').value = p.lugar;
-  document.getElementById('edit-zona').value = p.zona;
-  document.getElementById('edit-fecha').value = p.fecha || TODAY;
-  document.getElementById('edit-desc').value = p.desc;
-  document.getElementById('edit-obs').value = p.obs;
-  const panel = document.getElementById('edit-panel');
-  panel.style.display = 'block';
-  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  renderGrid();
-}
-
-function cerrarEdit() {
-  editingIdx = null;
-  document.getElementById('edit-panel').style.display = 'none';
-  renderGrid();
-}
-
-function captureEdit() {
-  if (editingIdx === null) return;
-  photos[editingIdx].lugar = document.getElementById('edit-lugar').value;
-  photos[editingIdx].zona  = document.getElementById('edit-zona').value;
-  photos[editingIdx].fecha = document.getElementById('edit-fecha').value;
-  photos[editingIdx].desc  = document.getElementById('edit-desc').value;
-  photos[editingIdx].obs   = document.getElementById('edit-obs').value;
-}
-
-function guardarEdicion() {
-  captureEdit();
-  const next = editingIdx + 1;
-  if (next < photos.length) openEdit(next);
-  else cerrarEdit();
-}
-
-function copiarAlSiguiente() {
-  if (editingIdx === null || editingIdx + 1 >= photos.length) return;
-  captureEdit();
-  const cur = photos[editingIdx];
-  photos[editingIdx + 1].lugar = cur.lugar;
-  photos[editingIdx + 1].zona  = cur.zona;
-  photos[editingIdx + 1].desc  = cur.desc;
-  openEdit(editingIdx + 1);
-}
-
-function aplicarATodos() {
-  if (editingIdx === null) return;
-  captureEdit();
-  const cur = photos[editingIdx];
-  photos.forEach((p, i) => {
-    if (i !== editingIdx) {
-      p.lugar = cur.lugar; p.zona = cur.zona; p.desc = cur.desc; p.obs = cur.obs;
-    }
-  });
-  renderGrid();
-  const saved = document.getElementById('edit-panel-title');
-  saved.textContent = '✔ Datos aplicados a todas las fotos';
-  setTimeout(() => openEdit(editingIdx), 1200);
-}
-
-// ── ESTILOS DE ETIQUETA ──
-const ESTILOS = {
-  navy:  { bg: 'rgba(11,37,69,0.93)', text: '#ffffff', sub: '#7EB3E0', line: 'rgba(200,168,75,0.6)', accent: '#C8A84B' },
-  dark:  { bg: 'rgba(18,18,18,0.92)', text: '#ffffff', sub: '#aaaaaa', line: 'rgba(255,255,255,0.2)', accent: '#888888' },
-  light: { bg: 'rgba(247,244,238,0.96)', text: '#0B2545', sub: '#1A6BB5', line: 'rgba(11,37,69,0.2)', accent: '#1A6BB5' }
-};
-
-function formatFecha(str) {
-  if (!str) return '';
-  const d = new Date(str + 'T12:00:00');
-  return d.toLocaleDateString('es-EC', { day:'2-digit', month:'long', year:'numeric' });
-}
-
-function wrapText(ctx, text, maxW) {
-  const words = text.split(' ');
-  const lines = [];
-  let cur = '';
-  words.forEach(w => {
-    const test = cur ? cur + ' ' + w : w;
-    if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; }
-    else cur = test;
-  });
-  if (cur) lines.push(cur);
-  return lines;
-}
-
-async function dibujarFoto(photo, idx) {
-  return new Promise(resolve => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.getElementById('work-canvas');
-      const ctx = canvas.getContext('2d');
-      const maxW = 1400;
-      let w = img.width, h = img.height;
-      if (w > maxW) { const r = maxW/w; w = Math.round(w*r); h = Math.round(h*r); }
-
-      const st = ESTILOS[document.getElementById('estilo').value] || ESTILOS.navy;
-      const empresa    = document.getElementById('empresa').value || 'BALANFARINA';
-      const area       = document.getElementById('area').value;
-      const zonaGlobal = document.getElementById('zona').value;
-      const elaborado  = document.getElementById('elaborado').value;
-      const cargo      = document.getElementById('cargo').value;
-      const descGen    = document.getElementById('desc-general').value;
-      const fInforme   = formatFecha(document.getElementById('fecha-informe').value);
-      const posicion   = document.getElementById('posicion').value;
-      const calidad    = parseFloat(document.getElementById('calidad').value);
-
-      const zona = photo.zona || zonaGlobal;
-      const fFoto = formatFecha(photo.fecha);
-
-      const F    = Math.max(13, Math.round(w * 0.017));
-      const PAD  = Math.round(w * 0.028);
-      const LH   = Math.round(F * 1.65);
-      const MAXW = w - PAD * 2;
-
-      // Cabecera: empresa, área/zona, descripción general
-      const topLines = [];
-      topLines.push({ big: true,  text: empresa.toUpperCase() });
-      const sub1Parts = [area, zona].filter(Boolean).join(' · ');
-      if (sub1Parts) topLines.push({ big: false, text: sub1Parts });
-      if (descGen) topLines.push({ big: false, text: descGen });
-
-      // Pie: lugar, descripción, fecha foto, elaborado, observaciones, fecha informe
-      const botLines = [];
-      if (photo.lugar) botLines.push({ label: 'Lugar', val: photo.lugar });
-      if (photo.desc)  botLines.push({ label: 'Descripción', val: photo.desc });
-
-      const fRow = [fFoto, elaborado ? 'Por: ' + elaborado + (cargo ? ', ' + cargo : '') : ''].filter(Boolean).join('   ·   ');
-      if (fRow) botLines.push({ label: '', val: fRow });
-
-      if (photo.obs) {
-        ctx.font = `${Math.round(F*0.88)}px 'Barlow', sans-serif`;
-        const obsWrapped = wrapText(ctx, photo.obs, MAXW - ctx.measureText('Observaciones: ').width);
-        obsWrapped.forEach((l, li) => botLines.push({ label: li===0 ? 'Observaciones' : '', val: l }));
-      }
-      if (fInforme) botLines.push({ label: 'Informe', val: fInforme });
-
-      const numLabel = `Foto ${String(idx+1).padStart(2,'0')}`;
-
-      ctx.font = `600 ${Math.round(F*1.12)}px 'Barlow Condensed', sans-serif`;
-      const topH = posicion === 'bottom' ? 0 : PAD*1.6 + topLines.length * LH;
-      const botH = PAD*1.6 + botLines.length * LH + LH;
-
-      if (posicion === 'overlay') {
-        canvas.width = w; canvas.height = h;
-        ctx.drawImage(img, 0, 0, w, h);
-        ctx.fillStyle = st.bg;
-        ctx.fillRect(0, h - botH, w, botH);
-        ctx.fillStyle = st.accent;
-        ctx.fillRect(0, h - botH, w, 3);
-        renderBotLines(ctx, botLines, PAD, h - botH + PAD, F, LH, st, numLabel, w, MAXW);
-      } else if (posicion === 'bottom') {
-        canvas.width = w; canvas.height = h + botH;
-        ctx.drawImage(img, 0, 0, w, h);
-        ctx.fillStyle = st.bg;
-        ctx.fillRect(0, h, w, botH);
-        ctx.fillStyle = st.accent; ctx.fillRect(0, h, w, 3);
-        renderBotLines(ctx, botLines, PAD, h + PAD + 4, F, LH, st, numLabel, w, MAXW);
-      } else {
-        canvas.width = w; canvas.height = h + topH + botH;
-        ctx.fillStyle = st.bg; ctx.fillRect(0, 0, w, topH);
-        ctx.fillStyle = st.accent; ctx.fillRect(0, topH - 3, w, 3);
-        ctx.drawImage(img, 0, topH, w, h);
-        ctx.fillStyle = st.accent; ctx.fillRect(0, topH + h, w, 3);
-        ctx.fillStyle = st.bg; ctx.fillRect(0, topH + h + 3, w, botH);
-        renderTopLines(ctx, topLines, PAD, PAD, F, LH, st, numLabel, w);
-        renderBotLines(ctx, botLines, PAD, topH + h + PAD + 4, F, LH, st, numLabel, w, MAXW);
-      }
-
-      canvas.toBlob(blob => resolve(blob), 'image/jpeg', calidad);
-    };
-    img.src = photo.url;
-  });
-}
-
-function renderTopLines(ctx, lines, x, y0, F, LH, st, numLabel, w) {
-  let y = y0;
-  lines.forEach(l => {
-    if (l.big) {
-      ctx.font = `700 ${Math.round(F * 1.25)}px 'Barlow Condensed', sans-serif`;
-      ctx.fillStyle = st.text;
-    } else {
-      ctx.font = `${Math.round(F * 0.9)}px 'Barlow', sans-serif`;
-      ctx.fillStyle = st.sub;
-    }
-    ctx.textAlign = 'left';
-    ctx.fillText(l.text, x, y + LH * 0.75);
-    y += LH;
-  });
-  ctx.font = `600 ${Math.round(F * 0.88)}px 'Barlow Condensed', sans-serif`;
-  ctx.fillStyle = st.accent;
-  ctx.textAlign = 'right';
-  ctx.fillText(numLabel, w - x, y0 + LH * 0.75);
-  ctx.textAlign = 'left';
-}
-
-function renderBotLines(ctx, lines, x, y0, F, LH, st, numLabel, w, maxW) {
-  let y = y0;
-  ctx.textAlign = 'right';
-  ctx.font = `600 ${Math.round(F * 0.88)}px 'Barlow Condensed', sans-serif`;
-  ctx.fillStyle = st.accent;
-  ctx.fillText(numLabel, w - x, y0 + LH * 0.75);
-  ctx.textAlign = 'left';
-
-  lines.forEach(l => {
-    if (l.label) {
-      ctx.font = `600 ${Math.round(F*0.82)}px 'Barlow', sans-serif`;
-      ctx.fillStyle = st.sub;
-      const lw = ctx.measureText(l.label + ': ').width;
-      ctx.fillText(l.label + ': ', x, y + LH * 0.75);
-      ctx.font = `${Math.round(F * 0.9)}px 'Barlow', sans-serif`;
-      ctx.fillStyle = st.text;
-      ctx.fillText(l.val, x + lw, y + LH * 0.75);
-    } else {
-      ctx.font = `${Math.round(F * 0.9)}px 'Barlow', sans-serif`;
-      ctx.fillStyle = st.sub;
-      ctx.fillText(l.val, x, y + LH * 0.75);
-    }
-    y += LH;
-  });
-}
-
-async function generarTodas() {
-  if (!photos.length) { alert('Agrega al menos una fotografía.'); return; }
-  document.getElementById('edit-panel').style.display = 'none';
-  generatedBlobs = [];
-  document.getElementById('results-section').innerHTML = '';
-  document.getElementById('prog-wrap').style.display = 'block';
-  document.getElementById('btn-generar').disabled = true;
-
-  const empresa = (document.getElementById('empresa').value || 'BALANFARINA').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'');
-
-  for (let i = 0; i < photos.length; i++) {
-    const pct = Math.round((i / photos.length) * 100);
-    document.getElementById('prog-fill').style.width = pct + '%';
-    document.getElementById('prog-label').textContent = `Procesando ${i+1} de ${photos.length} fotos…`;
-    const blob = await dibujarFoto(photos[i], i);
-    generatedBlobs.push(blob);
-
-    const url   = URL.createObjectURL(blob);
-    const fname = `${empresa}_foto_${String(i+1).padStart(2,'0')}_${(photos[i].lugar||'sin-lugar').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').slice(0,28)}.jpg`;
-
-    const rs = document.getElementById('results-section');
-    if (i === 0) {
-      rs.innerHTML = `<div class="section-card">
-        <div class="results-header">
-          <div class="section-icon"><i class="fa-solid fa-circle-check" style="color:#27AE60"></i></div>
-          <div><h2>Fotos generadas</h2></div>
-        </div>
-        <div id="results-list"></div>
-      </div>`;
-    }
-
-    const item = document.createElement('div');
-    item.className = 'result-item';
-    item.innerHTML = `
-      <img src="${url}" alt="Foto ${i+1}">
-      <div class="ri-info">
-        <div class="ri-name">Foto ${String(i+1).padStart(2,'0')} · ${photos[i].lugar || 'Sin lugar'}</div>
-        <div class="ri-meta">${[photos[i].desc, photos[i].obs ? photos[i].obs.slice(0,60)+'…' : ''].filter(Boolean).join(' — ')}</div>
-      </div>
-      <div class="ri-actions">
-        <a href="${url}" download="${fname}">
-          <button class="btn btn-outline btn-sm"><i class="fa-solid fa-download"></i> Descargar</button>
-        </a>
-        <button class="btn btn-gmail btn-sm" onclick="abrirGmailFoto(${i})">
-          <i class="fa-solid fa-envelope"></i> Gmail
-        </button>
-      </div>`;
-    document.getElementById('results-list').appendChild(item);
-  }
-
-  document.getElementById('prog-fill').style.width = '100%';
-  document.getElementById('prog-label').textContent = `✔ ${photos.length} foto${photos.length>1?'s':''} generada${photos.length>1?'s':''} correctamente.`;
-  document.getElementById('btn-zip').style.display = 'inline-flex';
-  document.getElementById('btn-gmail-global').style.display = 'inline-flex';
-  document.getElementById('btn-generar').disabled = false;
-  document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-async function descargarZip() {
-  if (!generatedBlobs.length) return;
-  const zip = new JSZip();
-  const empresa = (document.getElementById('empresa').value || 'BALANFARINA').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'');
-  const folder = zip.folder(empresa);
-  generatedBlobs.forEach((blob, i) => {
-    const fname = `${empresa}_foto_${String(i+1).padStart(2,'0')}_${(photos[i].lugar||'sin-lugar').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').slice(0,28)}.jpg`;
-    folder.file(fname, blob);
-  });
-  const content = await zip.generateAsync({ type: 'blob' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(content);
-  a.download = `${empresa}_registro_fotografico.zip`;
-  a.click();
-}
-
-function buildCuerpoFoto(p, idx) {
-  const empresa   = document.getElementById('empresa').value || 'BALANFARINA';
-  const area      = document.getElementById('area').value;
-  const zona      = document.getElementById('zona').value;
-  const elaborado = document.getElementById('elaborado').value;
-  const cargo     = document.getElementById('cargo').value;
-  const descGen   = document.getElementById('desc-general').value;
-  const fInforme  = formatFecha(document.getElementById('fecha-informe').value);
-  const fFoto     = formatFecha(p.fecha);
-  const zonaFinal = p.zona || zona;
-
-  const lineas = [
-    `Estimada Gerencia,`,
-    ``,
-    `Se adjunta el registro fotográfico correspondiente a la inspección realizada en ${empresa}.`,
-    ``,
-    `━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `DETALLE — FOTO ${String(idx+1).padStart(2,'0')}`,
-    `━━━━━━━━━━━━━━━━━━━━━━━━`,
-    area      ? `Área:            ${area}` : '',
-    zonaFinal ? `Zona / Sector:   ${zonaFinal}` : '',
-    p.lugar   ? `Lugar:           ${p.lugar}` : '',
-    p.desc    ? `Descripción:     ${p.desc}` : '',
-    fFoto     ? `Fecha de foto:   ${fFoto}` : '',
-    p.obs     ? `\nObservaciones:\n${p.obs}` : '',
-    ``,
-    `━━━━━━━━━━━━━━━━━━━━━━━━`,
-    descGen   ? `Contexto general: ${descGen}` : '',
-    fInforme  ? `Fecha del informe: ${fInforme}` : '',
-    elaborado ? `Elaborado por:    ${elaborado}${cargo ? ', ' + cargo : ''}` : '',
-    ``,
-    `Nota: Las imágenes etiquetadas se adjuntan manualmente desde el ZIP descargado.`,
-    ``,
-    `Atentamente,`,
-    elaborado ? elaborado : empresa,
-    cargo     ? cargo     : '',
-    empresa,
-  ];
-  return lineas.filter(l => l !== '').join('\n');
-}
-
-function buildCuerpoGlobal() {
-  const empresa   = document.getElementById('empresa').value || 'BALANFARINA';
-  const area      = document.getElementById('area').value;
-  const zona      = document.getElementById('zona').value;
-  const elaborado = document.getElementById('elaborado').value;
-  const cargo     = document.getElementById('cargo').value;
-  const descGen   = document.getElementById('desc-general').value;
-  const fInforme  = formatFecha(document.getElementById('fecha-informe').value);
-
-  const resumen = photos.map((p, i) => {
-    const zonaFinal = p.zona || zona;
-    const fFoto = formatFecha(p.fecha);
-    const partes = [
-      `  Foto ${String(i+1).padStart(2,'0')}:`,
-      p.lugar   ? `    Lugar:         ${p.lugar}` : '',
-      zonaFinal ? `    Zona:          ${zonaFinal}` : '',
-      p.desc    ? `    Descripción:   ${p.desc}` : '',
-      fFoto     ? `    Fecha:         ${fFoto}` : '',
-      p.obs     ? `    Observaciones: ${p.obs}` : '',
-    ];
-    return partes.filter(Boolean).join('\n');
-  }).join('\n\n');
-
-  const lineas = [
-    `Estimada Gerencia,`,
-    ``,
-    `Remito el informe fotográfico de inspección de ${empresa}${area ? ' — ' + area : ''}.`,
-    `A continuación el resumen de ${photos.length} fotografía${photos.length>1?'s':''} registradas:`,
-    ``,
-    `━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `RESUMEN GENERAL`,
-    `━━━━━━━━━━━━━━━━━━━━━━━━`,
-    resumen,
-    ``,
-    `━━━━━━━━━━━━━━━━━━━━━━━━`,
-    descGen  ? `Contexto: ${descGen}` : '',
-    fInforme ? `Fecha del informe: ${fInforme}` : '',
-    elaborado ? `Elaborado por: ${elaborado}${cargo ? ', ' + cargo : ''}` : '',
-    ``,
-    `Nota: Las imágenes etiquetadas se adjuntan desde el archivo ZIP descargado.`,
-    ``,
-    `Atentamente,`,
-    elaborado ? elaborado : empresa,
-    cargo     ? cargo     : '',
-    empresa,
-  ];
-  return lineas.filter(l => l !== '').join('\n');
-}
-
-function abrirGmailFoto(idx) {
-  const p       = photos[idx];
-  const empresa = document.getElementById('empresa').value || 'BALANFARINA';
-  const area    = document.getElementById('area').value;
-  const dest    = document.getElementById('correo-dest').value;
-  const cc      = document.getElementById('correo-cc').value;
-  const fInforme= formatFecha(document.getElementById('fecha-informe').value);
-
-  const asunto  = `[${empresa}] Registro fotográfico${area?' — '+area:''} — Foto ${String(idx+1).padStart(2,'0')}${p.lugar?' | '+p.lugar:''}${fInforme?' | '+fInforme:''}`;
-  const cuerpo  = buildCuerpoFoto(p, idx);
-
-  const params = new URLSearchParams();
-  if (dest) params.set('to', dest);
-  if (cc)   params.set('cc', cc);
-  params.set('su', asunto);
-  params.set('body', cuerpo);
-
-  window.open(`https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`, '_blank');
-}
-
-function abrirGmailGlobal() {
-  const empresa = document.getElementById('empresa').value || 'BALANFARINA';
-  const area    = document.getElementById('area').value;
-  const dest    = document.getElementById('correo-dest').value;
-  const cc      = document.getElementById('correo-cc').value;
-  const fInforme= formatFecha(document.getElementById('fecha-informe').value);
-
-  const asunto  = `[${empresa}] Informe fotográfico completo${area?' — '+area:''}${fInforme?' | '+fInforme:''} — ${photos.length} foto${photos.length>1?'s':''}`;
-  const cuerpo  = buildCuerpoGlobal();
-
-  const params = new URLSearchParams();
-  if (dest) params.set('to', dest);
-  if (cc)   params.set('cc', cc);
-  params.set('su', asunto);
-  params.set('body', cuerpo);
-
-  window.open(`https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`, '_blank');
-}
-
-function limpiarTodo() {
-  if (!confirm('¿Seguro que deseas limpiar todas las fotos y resultados?')) return;
-  photos = []; generatedBlobs = []; editingIdx = null;
-  renderGrid();
-  document.getElementById('edit-panel').style.display = 'none';
-  document.getElementById('results-section').innerHTML = '';
-  document.getElementById('btn-zip').style.display = 'none';
-  document.getElementById('btn-gmail-global').style.display = 'none';
-  document.getElementById('btn-limpiar').style.display = 'none';
-  document.getElementById('prog-wrap').style.display = 'none';
-  document.getElementById('prog-label').textContent = '';
-  document.getElementById('prog-fill').style.width = '0%';
-}
+/* ---------- Inicio ---------- */
+cargarGaleria();
 </script>
 </body>
 </html>
